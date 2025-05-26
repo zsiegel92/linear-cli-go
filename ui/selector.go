@@ -26,7 +26,7 @@ func previewIssue(issue models.LinearIssue, teamKeys []string) string {
 	}
 	
 	teamColor := utils.GetTeamColor(issue.Team.Key, teamKeys)
-	projectLine := utils.BoldUnderlineText(projectName)
+	projectLine := utils.ColorText(teamColor, utils.BoldUnderlineText(projectName))
 	if projectSlug != "" {
 		projectLine += " - " + utils.ColorText(teamColor, fmt.Sprintf("(%s)", projectSlug))
 	}

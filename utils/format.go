@@ -113,11 +113,14 @@ func FormatIssueDisplay(issue models.LinearIssue) string {
 		projectSlug = strings.ToUpper(GetSlug(issue.Project.Name))
 	}
 
-	prefix := fmt.Sprintf("[%s - %s", assignee, team)
+	var metadataParts []string
+	metadataParts = append(metadataParts, assignee)
+	metadataParts = append(metadataParts, team)
 	if projectSlug != "" {
-		prefix += " - " + projectSlug
+		metadataParts = append(metadataParts, projectSlug)
 	}
-	prefix += "]"
+
+	metadata := fmt.Sprintf("[%s]", strings.Join(metadataParts, " - "))
 
 	estimate := ""
 	if issue.Estimate != nil {
@@ -129,5 +132,47 @@ func FormatIssueDisplay(issue models.LinearIssue) string {
 		timeAgo = fmt.Sprintf(" (%s)", FormatTimeAgo(issue.UpdatedAt))
 	}
 
-	return fmt.Sprintf("%s%s %s%s", prefix, estimate, issue.Title, timeAgo)
+	return fmt.Sprintf("%s%s %s%s", metadata, estimate, issue.Title, timeAgo)
+}
+
+func FormatIssueDisplayWithColors(issue models.LinearIssue, teamKeys []string) string {
+	assignee := "UNASSIGNED"
+	if issue.Assignee != nil {
+		assignee = issue.Assignee.DisplayName
+	}
+
+	team := issue.Team.Key
+
+	projectSlug := ""
+	if issue.Project != nil {
+		projectSlug = strings.ToUpper(GetSlug(issue.Project.Name))
+	}
+
+	var metadataParts []string
+	metadataParts = append(metadataParts, assignee)
+	metadataParts = append(metadataParts, team)
+	if projectSlug != "" {
+		metadataParts = append(metadataParts, projectSlug)
+	}
+
+	teamColor := GetTeamColor(issue.Team.Key, teamKeys)
+	coloredParts := make([]string, len(metadataParts))
+	for i, part := range metadataParts {
+		coloredParts[i] = ColorText(teamColor, part)
+	}
+	coloredMetadata := fmt.Sprintf("[%s]", strings.Join(coloredParts, " - "))
+
+	estimate := ""
+	if issue.Estimate != nil {
+		estimate = fmt.Sprintf(" (%s)", FormatEstimate(issue.Estimate))
+	}
+
+	timeAgo := ""
+	if issue.UpdatedAt != "" {
+		timeAgo = fmt.Sprintf(" (%s)", FormatTimeAgo(issue.UpdatedAt))
+	}
+
+	coloredTitle := ColorText(Blue, issue.Title)
+
+	return fmt.Sprintf("%s%s %s%s", coloredMetadata, estimate, coloredTitle, timeAgo)
 }
