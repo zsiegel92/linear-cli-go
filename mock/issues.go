@@ -1,6 +1,6 @@
 package mock
 
-import "github.com/zach/linear_cli_go/models"
+import "github.com/zsiegel92/linear-cli-go/models"
 
 func GetMockIssues() []models.LinearIssue {
 	alice := &models.User{

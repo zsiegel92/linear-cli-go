@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/zach/linear_cli_go/models"
+	"github.com/zsiegel92/linear-cli-go/models"
 )
 
 const (

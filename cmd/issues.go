@@ -5,15 +5,15 @@ import (
 	"log"
 	"os"
 
-	"github.com/zach/linear_cli_go/actions"
-	"github.com/zach/linear_cli_go/linear"
-	"github.com/zach/linear_cli_go/mock"
-	"github.com/zach/linear_cli_go/models"
-	"github.com/zach/linear_cli_go/ui"
+	"github.com/zsiegel92/linear-cli-go/actions"
+	"github.com/zsiegel92/linear-cli-go/linear"
+	"github.com/zsiegel92/linear-cli-go/mock"
+	"github.com/zsiegel92/linear-cli-go/models"
+	"github.com/zsiegel92/linear-cli-go/ui"
 )
 
 const (
-	DefaultIssueLimit = 10
+	DefaultIssueLimit = 80
 )
 
 func RunIssueSelector(useMock bool, onlyMine bool, projectID string) {

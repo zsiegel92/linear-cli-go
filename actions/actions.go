@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zach/linear_cli_go/models"
-	"github.com/zach/linear_cli_go/utils"
+	"github.com/zsiegel92/linear-cli-go/models"
+	"github.com/zsiegel92/linear-cli-go/utils"
 )
 
 func ExecuteAction(action models.Action, issue *models.LinearIssue) error {

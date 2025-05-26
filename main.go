@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/zach/linear_cli_go/cmd"
+	"github.com/zsiegel92/linear-cli-go/cmd"
 )
 
 func main() {

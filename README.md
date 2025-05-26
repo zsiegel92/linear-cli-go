@@ -14,12 +14,13 @@ A Go implementation of a Linear CLI tool for interacting with Linear issues.
 
 ```bash
 # Clone the repository
-git clone https://github.com/zach/linear_cli_go.git
-cd linear_cli_go
+git clone https://github.com/zsiegel92/linear-cli-go.git
+cd linear-cli-go
 
 # Setup your Linear API key
-cp env.example .env
-# Edit the .env file with your Linear API key
+export LINEAR_API_KEY="your_api_key_here"
+# Or add to ~/.zshrc for persistence
+echo 'export LINEAR_API_KEY="your_api_key_here"' >> ~/.zshrc
 ```
 
 ## Usage
@@ -33,7 +34,7 @@ go run main.go
 To use mock data instead of the Linear API:
 
 ```bash
-go run main.go -mock
+go run main.go -demo
 ```
 
 To show only issues assigned to you:
@@ -57,7 +58,6 @@ go run main.go -help
 ## Project Structure
 
 - `cmd/` - Command-line commands and business logic
-- `config/` - Configuration and environment variables
 - `linear/` - Linear API client
 - `models/` - Data models for Linear objects
 - `mock/` - Mock data for testing
