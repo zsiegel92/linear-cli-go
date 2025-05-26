@@ -12,10 +12,15 @@ A Go implementation of a Linear CLI tool for interacting with Linear issues.
 
 ## Installation
 
+### Using Go Install (Recommended)
+
 ```bash
-# Clone the repository
-git clone https://github.com/zsiegel92/linear-cli-go.git
-cd linear-cli-go
+# Install the latest version
+go install github.com/zsiegel92/linear-cli-go@latest
+
+# Add Go's bin directory to your PATH (one-time setup)
+echo 'export PATH="$(go env GOPATH)/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
 
 # Setup your Linear API key
 export LINEAR_API_KEY="your_api_key_here"
@@ -23,9 +28,26 @@ export LINEAR_API_KEY="your_api_key_here"
 echo 'export LINEAR_API_KEY="your_api_key_here"' >> ~/.zshrc
 ```
 
+**Note:** After installation, you can run `linear-cli-go` from anywhere in your terminal.
+
+### Manual Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/zsiegel92/linear-cli-go.git
+cd linear-cli-go
+go install .
+```
+
 ## Usage
 
 To run the CLI with the Linear API:
+
+```bash
+linear-cli-go
+```
+
+Or if using the manual installation:
 
 ```bash
 go run main.go
@@ -34,25 +56,25 @@ go run main.go
 To use mock data instead of the Linear API:
 
 ```bash
-go run main.go -demo
+linear-cli-go -demo
 ```
 
 To show only issues assigned to you:
 
 ```bash
-go run main.go -mine
+linear-cli-go -mine
 ```
 
 To filter issues by project ID:
 
 ```bash
-go run main.go -project="proj_123"
+linear-cli-go -project="proj_123"
 ```
 
 For help:
 
 ```bash
-go run main.go -help
+linear-cli-go -help
 ```
 
 ## Project Structure
@@ -68,4 +90,64 @@ go run main.go -help
 Future versions will include:
 - Support for multiple actions on issues
 - Project selection
-- More advanced UI features 
+- More advanced UI features
+
+## Uninstalling
+
+### Go Install Method
+
+```bash
+# Remove the binary
+rm $(go env GOPATH)/bin/linear-cli-go
+
+# Optionally remove the PATH addition from ~/.zshrc
+# Edit ~/.zshrc and remove the line:
+# export PATH="$(go env GOPATH)/bin:$PATH"
+
+# Optionally remove the API key from ~/.zshrc
+# Edit ~/.zshrc and remove the line:
+# export LINEAR_API_KEY="your_api_key_here"
+```
+
+### Manual Installation Method
+
+```bash
+# Remove the binary (if you ran go install)
+rm $(go env GOPATH)/bin/linear-cli-go
+
+# Remove the source code
+rm -rf linear-cli-go/
+```
+
+## Troubleshooting
+
+### Command not found: linear-cli-go
+
+If you get "command not found" after installation:
+
+1. Check if the binary was installed:
+   ```bash
+   ls $(go env GOPATH)/bin/linear-cli-go
+   ```
+
+2. Add Go's bin directory to your PATH:
+   ```bash
+   echo 'export PATH="$(go env GOPATH)/bin:$PATH"' >> ~/.zshrc
+   source ~/.zshrc
+   ```
+
+3. Verify PATH is set correctly:
+   ```bash
+   echo $PATH | grep $(go env GOPATH)/bin
+   ```
+
+### LINEAR_API_KEY not set
+
+If you see an error about missing LINEAR_API_KEY:
+
+1. Get your API key from https://linear.app/settings/api
+2. Set it in your shell:
+   ```bash
+   echo 'export LINEAR_API_KEY="your_api_key_here"' >> ~/.zshrc
+   source ~/.zshrc
+   ```
