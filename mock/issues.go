@@ -2,9 +2,7 @@ package mock
 
 import "github.com/zach/linear_cli_go/models"
 
-// GetMockIssues returns a slice of mock LinearIssue objects
 func GetMockIssues() []models.LinearIssue {
-	// Define reusable objects
 	alice := &models.User{
 		Name:        "Alice Smith",
 		Email:       "alice@company.com",
@@ -92,18 +90,15 @@ func GetMockIssues() []models.LinearIssue {
 		Id:     "proj_789",
 	}
 
-	// Create mock estimates
 	estimate3 := float64(3)
 	estimate5 := float64(5)
 	estimate2 := float64(2)
 	estimate8 := float64(8)
 
-	// Create mock priorities
 	priority1 := 1
 	priority2 := 2
 	priority3 := 3
 
-	// Export mock issues
 	return []models.LinearIssue{
 		{
 			Id:            "LIN-101",
@@ -208,7 +203,6 @@ func GetMockIssues() []models.LinearIssue {
 	}
 }
 
-// GetMockIssuesForUser returns mock issues filtered by assignee (simulates -mine flag)
 func GetMockIssuesForUser(userDisplayName string) []models.LinearIssue {
 	allIssues := GetMockIssues()
 	var filteredIssues []models.LinearIssue

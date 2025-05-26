@@ -8,7 +8,6 @@ import (
 	"github.com/zach/linear_cli_go/utils"
 )
 
-// ExecuteAction performs the specified action on the given issue
 func ExecuteAction(action models.Action, issue *models.LinearIssue) error {
 	switch action {
 	case models.CopyIssueURL:
@@ -21,7 +20,6 @@ func ExecuteAction(action models.Action, issue *models.LinearIssue) error {
 	case models.CopyBranchName:
 		branchName := issue.BranchName
 		if branchName == "" {
-			// Generate a branch name if none exists
 			branchName = GenerateBranchName(issue)
 		}
 		if err := utils.CopyToClipboard(branchName); err != nil {
@@ -42,14 +40,11 @@ func ExecuteAction(action models.Action, issue *models.LinearIssue) error {
 	}
 }
 
-// GenerateBranchName creates a branch name from the issue
 func GenerateBranchName(issue *models.LinearIssue) string {
-	// Convert title to kebab-case
 	title := strings.ToLower(issue.Title)
 	title = strings.ReplaceAll(title, " ", "-")
 	title = strings.ReplaceAll(title, "_", "-")
 	
-	// Remove special characters
 	var builder strings.Builder
 	for _, char := range title {
 		if (char >= 'a' && char <= 'z') || (char >= '0' && char <= '9') || char == '-' {
@@ -58,19 +53,16 @@ func GenerateBranchName(issue *models.LinearIssue) string {
 	}
 	title = builder.String()
 	
-	// Remove consecutive dashes and trim
 	for strings.Contains(title, "--") {
 		title = strings.ReplaceAll(title, "--", "-")
 	}
 	title = strings.Trim(title, "-")
 	
-	// Limit length
 	if len(title) > 50 {
 		title = title[:50]
 		title = strings.Trim(title, "-")
 	}
 	
-	// Combine with team key
 	branchName := fmt.Sprintf("%s-%s", strings.ToLower(issue.Team.Key), title)
 	
 	return branchName

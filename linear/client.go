@@ -15,13 +15,11 @@ const (
 	LinearAPIURL = "https://api.linear.app/graphql"
 )
 
-// Client represents a Linear API client
 type Client struct {
 	APIKey     string
 	HTTPClient *http.Client
 }
 
-// NewClient creates a new Linear API client
 func NewClient(apiKey string) *Client {
 	if apiKey == "" {
 		apiKey = os.Getenv("LINEAR_API_KEY")
@@ -33,13 +31,11 @@ func NewClient(apiKey string) *Client {
 	}
 }
 
-// GraphQLRequest represents a GraphQL request
 type GraphQLRequest struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables,omitempty"`
 }
 
-// GraphQLResponse represents a GraphQL response
 type GraphQLResponse struct {
 	Data   json.RawMessage `json:"data"`
 	Errors []struct {
@@ -47,7 +43,6 @@ type GraphQLResponse struct {
 	} `json:"errors,omitempty"`
 }
 
-// ExecuteGraphQL executes a GraphQL query against the Linear API
 func (c *Client) ExecuteGraphQL(query string, variables map[string]interface{}) (*GraphQLResponse, error) {
 	req := GraphQLRequest{
 		Query:     query,
@@ -90,12 +85,10 @@ func (c *Client) ExecuteGraphQL(query string, variables map[string]interface{}) 
 	return &graphQLResp, nil
 }
 
-// GetIssues fetches issues from Linear
 func (c *Client) GetIssues(onlyMine bool, projectID string, limit int) ([]models.LinearIssue, error) {
 	var currentUserID string
 	var err error
 	
-	// If onlyMine is true, we need to get the current user's ID first
 	if onlyMine {
 		currentUserID, err = c.getCurrentUserID()
 		if err != nil {
@@ -185,40 +178,7 @@ func (c *Client) GetIssues(onlyMine bool, projectID string, limit int) ([]models
 	return result.Issues.Nodes, nil
 }
 
-// GetProjects fetches projects from Linear
-func (c *Client) GetProjects() ([]models.Project, error) {
-	query := `
-		query GetProjects { 
-			projects(first: 100) {
-				nodes { 
-					id
-					name
-					color
-					slugId
-				} 
-			} 
-		}
-	`
 
-	resp, err := c.ExecuteGraphQL(query, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	var result struct {
-		Projects struct {
-			Nodes []models.Project `json:"nodes"`
-		} `json:"projects"`
-	}
-
-	if err := json.Unmarshal(resp.Data, &result); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal projects: %w", err)
-	}
-
-	return result.Projects.Nodes, nil
-}
-
-// getCurrentUserID fetches the current user's ID from Linear
 func (c *Client) getCurrentUserID() (string, error) {
 	query := `
 		query GetCurrentUser { 
@@ -246,7 +206,6 @@ func (c *Client) getCurrentUserID() (string, error) {
 	return result.Viewer.ID, nil
 }
 
-// Helper function to join strings with a separator
 func joinStrings(strs []string, sep string) string {
 	if len(strs) == 0 {
 		return ""

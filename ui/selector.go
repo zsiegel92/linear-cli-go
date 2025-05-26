@@ -11,16 +11,13 @@ import (
 	"github.com/zach/linear_cli_go/utils"
 )
 
-// DisplayIssue formats an issue for display in the terminal
 func DisplayIssue(issue models.LinearIssue) string {
 	return utils.FormatIssueDisplay(issue)
 }
 
-// previewIssue creates a detailed preview of an issue (similar to TypeScript version)
 func previewIssue(issue models.LinearIssue, teamKeys []string) string {
 	var preview strings.Builder
 	
-	// Project line with underline and bold
 	projectName := "<No Project Specified For Issue>"
 	projectSlug := ""
 	if issue.Project != nil {
@@ -35,14 +32,12 @@ func previewIssue(issue models.LinearIssue, teamKeys []string) string {
 	}
 	preview.WriteString(projectLine + "\n")
 	
-	// Title line with estimate
 	titleLine := utils.ColorText(utils.Blue, utils.BoldText(issue.Title))
 	if issue.Estimate != nil {
 		titleLine += fmt.Sprintf(" - (%s)", utils.FormatEstimate(issue.Estimate))
 	}
 	preview.WriteString(titleLine + "\n")
 	
-	// Creator line
 	if issue.Creator.DisplayName != "" {
 		createdAt, err := time.Parse(time.RFC3339, issue.CreatedAt)
 		if err == nil {
@@ -50,25 +45,20 @@ func previewIssue(issue models.LinearIssue, teamKeys []string) string {
 		}
 	}
 	
-	// Updated line
 	if issue.UpdatedAt != "" {
 		preview.WriteString(fmt.Sprintf("Updated %s\n", utils.FormatTimeAgo(issue.UpdatedAt)))
 	}
 	
-	// Branch name
 	if issue.BranchName != "" {
 		preview.WriteString(utils.BoldText(issue.BranchName) + "\n")
 	}
 	
-	// URL
 	if issue.URL != "" {
 		preview.WriteString(utils.BoldText(issue.URL) + "\n")
 	}
 	
-	// Empty line before description
 	preview.WriteString("\n")
 	
-	// Description
 	if issue.Description != "" {
 		preview.WriteString(issue.Description)
 	}
@@ -76,7 +66,6 @@ func previewIssue(issue models.LinearIssue, teamKeys []string) string {
 	return preview.String()
 }
 
-// SelectIssue displays a fuzzy-searchable list of issues and allows the user to select one
 func SelectIssue(issues []models.LinearIssue) (*models.LinearIssue, error) {
 	if len(issues) == 0 {
 		return nil, fmt.Errorf("no issues to select from")
@@ -98,7 +87,6 @@ func SelectIssue(issues []models.LinearIssue) (*models.LinearIssue, error) {
 		}),
 	)
 	if err != nil {
-		// Handle cancellation gracefully
 		if err.Error() == "^C" || err.Error() == "^D" {
 			fmt.Println("\n👋 Goodbye!")
 			os.Exit(0)
@@ -109,14 +97,12 @@ func SelectIssue(issues []models.LinearIssue) (*models.LinearIssue, error) {
 	return &issues[index], nil
 }
 
-// ActionItem represents an action that can be performed on an issue
 type ActionItem struct {
 	Label       string
 	Action      models.Action
 	Description string
 }
 
-// SelectAction displays a list of actions and allows the user to select one
 func SelectAction(issue *models.LinearIssue) (models.Action, error) {
 	actions := []ActionItem{
 		{
@@ -151,8 +137,7 @@ func SelectAction(issue *models.LinearIssue) (models.Action, error) {
 			preview.WriteString(utils.BoldText(action.Label) + "\n\n")
 			preview.WriteString(action.Description + "\n\n")
 			
-			// Show the specific value that will be used
-			switch action.Action {
+				switch action.Action {
 			case models.CopyBranchName:
 				preview.WriteString(fmt.Sprintf("Branch name: %s", utils.BoldText(issue.BranchName)))
 			case models.CopyIssueURL, models.OpenInBrowser:
@@ -163,7 +148,6 @@ func SelectAction(issue *models.LinearIssue) (models.Action, error) {
 		}),
 	)
 	if err != nil {
-		// Handle cancellation gracefully
 		if err.Error() == "^C" || err.Error() == "^D" {
 			fmt.Println("\n👋 Goodbye!")
 			os.Exit(0)

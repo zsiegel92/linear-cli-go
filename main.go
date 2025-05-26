@@ -3,17 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/zach/linear_cli_go/cmd"
-	"github.com/zach/linear_cli_go/config"
 )
 
 func main() {
-	// Set up signal handling for graceful shutdown
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
@@ -22,7 +19,6 @@ func main() {
 		os.Exit(0)
 	}()
 
-	// Parse command line flags - both long and short forms
 	var useMock bool
 	flag.BoolVar(&useMock, "d", false, "Use demo data instead of Linear API")
 	flag.BoolVar(&useMock, "demo", false, "Use demo data instead of Linear API")
@@ -50,16 +46,19 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Load environment variables from .env file
-	if err := config.LoadEnv(); err != nil {
-		log.Fatalf("Error loading environment variables: %v", err)
-	}
-
-	// Check if LINEAR_API_KEY is set when not using mock data
 	if !useMock && os.Getenv("LINEAR_API_KEY") == "" {
-		log.Fatalf("LINEAR_API_KEY environment variable is required. Please set it in .env file or environment.")
+		fmt.Println("❌ LINEAR_API_KEY environment variable is required.")
+		fmt.Println("")
+		fmt.Println("To set it up:")
+		fmt.Println("1. Get your Linear API key from https://linear.app/settings/api")
+		fmt.Println("2. Add it to your shell configuration:")
+		fmt.Println("   echo 'export LINEAR_API_KEY=\"your_api_key_here\"' >> ~/.zshrc")
+		fmt.Println("   source ~/.zshrc")
+		fmt.Println("")
+		fmt.Println("Or set it temporarily:")
+		fmt.Println("   export LINEAR_API_KEY=\"your_api_key_here\"")
+		os.Exit(1)
 	}
 
-	// Run the issue selector
 	cmd.RunIssueSelector(useMock, onlyMine, projectID)
 }

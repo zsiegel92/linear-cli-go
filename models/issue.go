@@ -1,31 +1,26 @@
 package models
 
-// Team represents a Linear team
 type Team struct {
 	Name        string `json:"name"`
 	Key         string `json:"key"`
 	DisplayName string `json:"displayName,omitempty"`
 }
 
-// State represents a Linear issue state
 type State struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
 }
 
-// Cycle represents a Linear cycle
 type Cycle struct {
 	Name string `json:"name,omitempty"`
 }
 
-// User represents a Linear user
 type User struct {
 	Name        string `json:"name"`
 	Email       string `json:"email"`
 	DisplayName string `json:"displayName"`
 }
 
-// Project represents a Linear project
 type Project struct {
 	Name   string `json:"name"`
 	Color  string `json:"color"`
@@ -33,7 +28,6 @@ type Project struct {
 	Id     string `json:"id"`
 }
 
-// LinearIssue represents a Linear issue
 type LinearIssue struct {
 	Id            string   `json:"id"`
 	Title         string   `json:"title"`
@@ -55,7 +49,6 @@ type LinearIssue struct {
 	Project       *Project `json:"project,omitempty"`
 }
 
-// Define possible actions
 type Action string
 
 const (

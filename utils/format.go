@@ -8,7 +8,6 @@ import (
 	"github.com/zach/linear_cli_go/models"
 )
 
-// GetSlug creates a slug from project name using TypeScript-like logic
 func GetSlug(text string) string {
 	preserved := ":()[]{}-&"
 	preservedSet := make(map[rune]bool)
@@ -48,12 +47,7 @@ func GetSlug(text string) string {
 	return result.String()
 }
 
-// GenerateProjectSlug creates a short slug from project name (legacy function)
-func GenerateProjectSlug(projectName string) string {
-	return GetSlug(projectName)
-}
 
-// FormatTimeAgo formats time relative to now (e.g., "2 days ago")
 func FormatTimeAgo(timeStr string) string {
 	if timeStr == "" {
 		return ""
@@ -96,7 +90,6 @@ func FormatTimeAgo(timeStr string) string {
 	}
 }
 
-// FormatEstimate formats point estimate
 func FormatEstimate(estimate *float64) string {
 	if estimate == nil {
 		return ""
@@ -107,38 +100,30 @@ func FormatEstimate(estimate *float64) string {
 	return fmt.Sprintf("%.1f", *estimate)
 }
 
-// FormatIssueDisplay formats issue for display in the TypeScript style:
-// [ASSIGNEE - TEAM - PROJECT_SLUG] (ESTIMATE) TITLE (X days ago)
 func FormatIssueDisplay(issue models.LinearIssue) string {
-	// Assignee
 	assignee := "UNASSIGNED"
 	if issue.Assignee != nil {
 		assignee = issue.Assignee.DisplayName
 	}
 
-	// Team
 	team := issue.Team.Key
 
-	// Project slug using custom slug function
 	projectSlug := ""
 	if issue.Project != nil {
 		projectSlug = strings.ToUpper(GetSlug(issue.Project.Name))
 	}
 
-	// Build the prefix
 	prefix := fmt.Sprintf("[%s - %s", assignee, team)
 	if projectSlug != "" {
 		prefix += " - " + projectSlug
 	}
 	prefix += "]"
 
-	// Estimate
 	estimate := ""
 	if issue.Estimate != nil {
 		estimate = fmt.Sprintf(" (%s)", FormatEstimate(issue.Estimate))
 	}
 
-	// Time ago
 	timeAgo := ""
 	if issue.UpdatedAt != "" {
 		timeAgo = fmt.Sprintf(" (%s)", FormatTimeAgo(issue.UpdatedAt))
